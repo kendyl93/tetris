@@ -1,7 +1,10 @@
 import React from "react";
 
+export type StageCell = Array<number | string>;
+export type StageRow = Array<StageCell>;
+export type Stage = Array<StageRow>;
 interface Props {
-  stage: Array<Array<number | string>>;
+  stage: Stage;
 }
 
 const Stage: React.FC<Props> = ({ stage }) => {
