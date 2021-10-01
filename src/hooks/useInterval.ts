@@ -1,7 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from "react";
 
-const useInterval = (callback: any, delay: number) => {
-  const savedCallback = useRef();
+type IntervalCallback = () => unknown | void;
+
+const useInterval = (callback: IntervalCallback, delay: number) => {
+  const savedCallback = useRef<IntervalCallback | null>(null);
+
   // Remember the latest callback.
   useEffect(() => {
     savedCallback.current = callback;
@@ -13,7 +16,6 @@ const useInterval = (callback: any, delay: number) => {
       if (savedCallback.current) {
         savedCallback.current();
       }
-      console.log('test');
     };
 
     if (delay !== null) {
