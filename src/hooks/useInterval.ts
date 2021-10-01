@@ -13,6 +13,7 @@ const useInterval = (callback: any, delay: number) => {
       if (savedCallback.current) {
         savedCallback.current();
       }
+      console.log('test');
     };
 
     if (delay !== null) {

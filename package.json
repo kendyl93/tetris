@@ -38,8 +38,8 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
-      "format",
-      "lint"
+      "npm run format",
+      "npm run lint"
     ]
   },
   "browserslist": {
