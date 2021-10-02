@@ -7,7 +7,7 @@ type Tetromino = {
 };
 
 export const TETROMINOS: Tetromino = {
-  [EMPTY]: { shape: [[0]], color: "0,0,0" },
+  [EMPTY]: { shape: [[0]], color: "0, 0, 0" },
   I: {
     shape: [
       [0, 1, 0, 0],

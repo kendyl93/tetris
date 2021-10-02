@@ -1,5 +1,6 @@
 import React from "react";
 import Cell from "../Cell";
+import { StyledStage } from "./Styles";
 
 export type StageCell = Array<number | string>;
 export type StageRow = Array<StageCell>;
@@ -10,11 +11,11 @@ interface Props {
 
 const Stage: React.FC<Props> = ({ stage }) => {
   return (
-    <div>
+    <StyledStage width={stage[0].length} height={stage.length}>
       {stage.map((row) =>
-        row.map((cell, index) => <Cell key={index} cell={cell[0]} />)
+        row.map((cell, index) => <Cell key={index} type={cell[0]} />)
       )}
-    </div>
+    </StyledStage>
   );
 };
 
