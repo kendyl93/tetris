@@ -1,7 +1,11 @@
 import React from "react";
 
-const Cell: React.FC = () => {
-  return <div>Cell</div>;
+interface Props {
+  cell: number | string;
+}
+
+const Cell: React.FC<Props> = ({ cell }) => {
+  return <div>{cell}</div>;
 };
 
 export default Cell;
