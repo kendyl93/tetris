@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
-import { createStage } from '../components/Stage/createStage';
-import { IPlayer } from './usePlayer';
+import { useState, useEffect } from "react";
+import { createStage } from "../components/Stage/createStage";
+import { IPlayer } from "./usePlayer";
 import {
   STAGE,
   NO_COLLISION_WITH_ANOTHER_TETROMINOR,
-} from '../components/Stage/contants';
+} from "../components/Stage/contants";
 
 const drawStage = (previousStage: any) =>
   previousStage?.map((row: any) =>
@@ -19,7 +19,7 @@ const drawTetrominor = (player: any, newStage: any) => {
       if (cellValue !== 0) {
         newStage[Yindex + player.position.y][Xindex + player.position.x] = [
           1,
-          `${player.collided ? 'merged' : 'clear'}`,
+          `${player.collided ? "merged" : "clear"}`,
         ];
       }
     })
@@ -47,7 +47,7 @@ const sweepRows = (newStage: any, setClearRows: any) => {
   return newStage.reduce((acc: any, row: any) => {
     if (row.findIndex((cell: any) => cell[0] === 0) === -1) {
       setClearRows((prev: any) => prev + 1);
-      acc.unshift(new Array(newStage[0].length).fill([0, 'clear']));
+      acc.unshift(new Array(newStage[0].length).fill([0, "clear"]));
       return acc;
     }
 
@@ -58,17 +58,17 @@ const sweepRows = (newStage: any, setClearRows: any) => {
 
 const useStage = (player: IPlayer, resetPlayer: any) => {
   const [stage, setStage] = useState<any>(createStage());
-  const [clearRows, setClearRows] = useState(0);
+  const [clearedRows, setClearedRows] = useState(0);
 
   useEffect(() => {
-    setClearRows(0);
+    setClearedRows(0);
 
     setStage((prev: any) =>
-      updateStage(player, prev, resetPlayer, setClearRows)
+      updateStage(player, prev, resetPlayer, setClearedRows)
     );
   }, [player]);
 
-  return [stage, setStage] as const;
+  return [stage, setStage, clearedRows] as const;
 };
 
 export default useStage;
