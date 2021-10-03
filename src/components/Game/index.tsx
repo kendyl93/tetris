@@ -7,13 +7,16 @@ import useStage from "../../hooks/useStage";
 import { createStage } from "../Stage/createStage";
 import { checkCollision } from "../Stage/createStage";
 import useInterval from "../../hooks/useInterval";
+import { useGameStatus } from "../../hooks/useGameStatus";
 
 const Game: React.FC = () => {
   const [dropTime, setDropTime] = useState<number | null>(null);
   const [gameOver, setGameOver] = useState(false);
   const [player, updateTetrominorPosition, resetPlayer, rotateTetromino] =
     usePlayer();
-  const [stage, setStage] = useStage(player, resetPlayer);
+  const [stage, setStage, clearedRows] = useStage(player, resetPlayer);
+  const [score, setScore, rows, setRows, level, setLevel] =
+    useGameStatus(clearedRows);
 
   useInterval(() => {
     moveTetrominoDown();
@@ -21,9 +24,12 @@ const Game: React.FC = () => {
 
   const startGame = () => {
     setStage(createStage());
-    setDropTime(1000);
+    setDropTime(1000 / level + 200);
     resetPlayer();
     setGameOver(false);
+    setScore(0);
+    setRows(0); //remove and use clearedRows
+    setLevel(1);
   };
 
   const movePlayerHorizontally = (direction: number) => {
@@ -33,6 +39,11 @@ const Game: React.FC = () => {
   };
 
   const moveTetrominoDown = () => {
+    if (rows > level * 10) {
+      setLevel((prev) => prev + 1);
+      setDropTime(1000 / level + 200);
+    }
+
     if (!checkCollision(player, stage, { x: 0, y: 1 })) {
       updateTetrominorPosition({ x: 0, y: 1 }, false);
     } else {
@@ -88,8 +99,9 @@ const Game: React.FC = () => {
             <Display text="GameOver" />
           ) : (
             <>
-              <Display text="Score" />
-              <Display text="level" />
+              <Display text={`Score: ${score}`} />
+              <Display text={`Rows: ${rows}`} />
+              <Display text={`level: ${level}`} />
               <button onClick={startGame}>START</button>
             </>
           )}
