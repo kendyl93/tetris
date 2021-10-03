@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 
 type IntervalCallback = () => unknown | void;
 
-const useInterval = (callback: IntervalCallback, delay: number) => {
+const useInterval = (callback: IntervalCallback, delay: number | null) => {
   const savedCallback = useRef<IntervalCallback | null>(null);
 
   // Remember the latest callback.

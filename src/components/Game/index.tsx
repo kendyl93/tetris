@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Stage from "../Stage";
 import { StyledGameWrapper, StyledGame } from "./Styles";
 import Display from "../Display";
@@ -6,16 +6,22 @@ import usePlayer from "../../hooks/usePlayer";
 import useStage from "../../hooks/useStage";
 import { createStage } from "../Stage/createStage";
 import { checkCollision } from "../Stage/createStage";
+import useInterval from "../../hooks/useInterval";
 
 const Game: React.FC = () => {
-  const [dropTime, setDropTime] = useState(null);
+  const [dropTime, setDropTime] = useState<number | null>(null);
   const [gameOver, setGameOver] = useState(false);
   const [player, updateTetrominorPosition, resetPlayer, rotateTetromino] =
     usePlayer();
   const [stage, setStage] = useStage(player, resetPlayer);
 
+  useInterval(() => {
+    moveTetrominoDown();
+  }, dropTime);
+
   const startGame = () => {
     setStage(createStage());
+    setDropTime(1000);
     resetPlayer();
     setGameOver(false);
   };
@@ -26,7 +32,7 @@ const Game: React.FC = () => {
     }
   };
 
-  const movePlayerDown = () => {
+  const moveTetrominoDown = () => {
     if (!checkCollision(player, stage, { x: 0, y: 1 })) {
       updateTetrominorPosition({ x: 0, y: 1 }, false);
     } else {
@@ -39,6 +45,11 @@ const Game: React.FC = () => {
     }
   };
 
+  const dropTetromino = () => {
+    setDropTime(null);
+    moveTetrominoDown();
+  };
+
   const handleKeyDown = (event: React.KeyboardEvent) => {
     const { key } = event;
 
@@ -48,15 +59,28 @@ const Game: React.FC = () => {
       } else if (key === "ArrowRight") {
         return movePlayerHorizontally(1);
       } else if (key === "ArrowDown") {
-        return movePlayerDown();
+        return dropTetromino();
       } else if (key === "ArrowUp") {
         rotateTetromino(stage, 1);
       }
     }
   };
 
+  const handleKeyUp = (event: React.KeyboardEvent) => {
+    const { key } = event;
+
+    if (!gameOver && key === "ArrowDown") {
+      setDropTime(1000);
+    }
+  };
+
   return (
-    <StyledGameWrapper role="button" tabIndex={0} onKeyDown={handleKeyDown}>
+    <StyledGameWrapper
+      role="button"
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+      onKeyUp={handleKeyUp}
+    >
       <StyledGame>
         <Stage stage={stage} />
         <aside>
