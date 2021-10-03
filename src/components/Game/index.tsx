@@ -18,9 +18,9 @@ const Game: React.FC = () => {
   const [score, setScore, rows, setRows, level, setLevel] =
     useGameStatus(clearedRows);
 
-  useInterval(() => {
-    moveTetrominoDown();
-  }, dropTime);
+  // useInterval(() => {
+  //   moveTetrominoDown();
+  // }, dropTime);
 
   const startGame = () => {
     setStage(createStage());

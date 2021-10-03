@@ -7,9 +7,9 @@ interface Props {
 }
 
 const Cell: React.FC<Props> = ({ type }) => {
-  // const { color } = TETROMINOS[type];
+  const { color } = TETROMINOS[type] || {};
 
-  return <StyledCell color={"255,0,0"} type={type} />;
+  return <StyledCell color={color} type={type} />;
 };
 
 export default Cell;

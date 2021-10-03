@@ -18,7 +18,7 @@ const drawTetrominor = (player: any, newStage: any) => {
     rowValue.map((cellValue: any, Xindex: any) => {
       if (cellValue !== 0) {
         newStage[Yindex + player.position.y][Xindex + player.position.x] = [
-          1,
+          cellValue,
           `${player.collided ? "merged" : "clear"}`,
         ];
       }
@@ -59,6 +59,8 @@ const sweepRows = (newStage: any, setClearRows: any) => {
 const useStage = (player: IPlayer, resetPlayer: any) => {
   const [stage, setStage] = useState<any>(createStage());
   const [clearedRows, setClearedRows] = useState(0);
+
+  console.log({ stage });
 
   useEffect(() => {
     setClearedRows(0);

@@ -27,6 +27,8 @@ const usePlayer = () => {
     tetromino: TETROMINOS[0].shape,
   });
 
+  console.log({ player });
+
   const rotate = (matrix: any[], direction: number) => {
     const transposedTetromino = matrix.map((_, index) =>
       matrix.map((column: any) => column[index])
@@ -61,7 +63,7 @@ const usePlayer = () => {
 
   const updateTetrominorPosition = ({ x, y }: IPosition, collided: boolean) => {
     setPlayer((prev) => ({
-      ...player,
+      ...prev,
       position: { x: (prev.position.x += x), y: (prev.position.y += y) },
       collided,
     }));
