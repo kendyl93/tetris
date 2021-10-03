@@ -10,7 +10,8 @@ import { checkCollision } from "../Stage/createStage";
 const Game: React.FC = () => {
   const [dropTime, setDropTime] = useState(null);
   const [gameOver, setGameOver] = useState(false);
-  const [player, updateTetrominorPosition, resetPlayer] = usePlayer();
+  const [player, updateTetrominorPosition, resetPlayer, rotateTetromino] =
+    usePlayer();
   const [stage, setStage] = useStage(player, resetPlayer);
 
   const startGame = () => {
@@ -48,6 +49,8 @@ const Game: React.FC = () => {
         return movePlayerHorizontally(1);
       } else if (key === "ArrowDown") {
         return movePlayerDown();
+      } else if (key === "ArrowUp") {
+        rotateTetromino(stage, 1);
       }
     }
   };
