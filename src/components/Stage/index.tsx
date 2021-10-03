@@ -9,9 +9,9 @@ interface Props {
   stage: StageType;
 }
 
-const Stage: React.FC<Props> = ({ stage }) => {
+const Stage: React.FC<Props> = ({ stage = [] }) => {
   return (
-    <StyledStage width={stage[0].length} height={stage.length}>
+    <StyledStage width={stage[0]?.length} height={stage?.length}>
       {stage.map((row) =>
         row.map((cell, index) => <Cell key={index} type={cell[0]} />)
       )}

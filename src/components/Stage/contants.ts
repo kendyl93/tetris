@@ -1,5 +1,5 @@
 const CLEAN_CELL = 0;
-const NO_COLLISION_WITH_ANOTHER_TETROMINOR = "clear";
+export const NO_COLLISION_WITH_ANOTHER_TETROMINOR = "clear";
 
 export const STAGE = {
   WIDTH: 12,
