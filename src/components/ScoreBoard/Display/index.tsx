@@ -6,13 +6,11 @@ interface Props {
   value: number;
 }
 
-const Display: React.FC<Props> = ({ text, value }) => {
-  return (
-    <StyledDisplay>
-      <div className="text">{text}:</div>
-      <div className="value">{value}</div>
-    </StyledDisplay>
-  );
-};
+const Display: React.FC<Props> = ({ text, value }) => (
+  <StyledDisplay>
+    <div className="text">{text}:</div>
+    <div className="value">{value}</div>
+  </StyledDisplay>
+);
 
 export default Display;
