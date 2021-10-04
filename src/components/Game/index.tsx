@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import Stage from "../Stage";
+import React, { useState } from "react";
+import Stage, { StageType } from "../Stage";
 import { StyledGameWrapper, StyledGame } from "./Styles";
 import Display from "../Display";
 import usePlayer from "../../hooks/usePlayer";
@@ -9,10 +9,22 @@ import { checkCollision } from "../Stage/createStage";
 import useInterval from "../../hooks/useInterval";
 import { useGameStatus } from "../../hooks/useGameStatus";
 
+enum Direction {
+  LEFT = -1,
+  RIGHT = 1,
+}
+
+enum KeysActions {
+  ARROW_LEFT = "ArrowLeft",
+  ARROW_RIGHT = "ArrowRight",
+  ARROW_DOWN = "ArrowDown",
+  ARROW_UP = "ArrowUp",
+}
+
 const Game: React.FC = () => {
   const [dropTime, setDropTime] = useState<number | null>(null);
   const [gameOver, setGameOver] = useState(false);
-  const [player, updateTetrominorPosition, resetTetromino, rotateTetromino] =
+  const [player, updateTetrominoPosition, resetTetromino, rotateTetromino] =
     usePlayer();
   const [stage, setStage, clearedRows] = useStage(player, resetTetromino);
   const [score, setScore, rows, setRows, level, setLevel] =
@@ -28,13 +40,13 @@ const Game: React.FC = () => {
     resetTetromino();
     setGameOver(false);
     setScore(0);
-    setRows(0); //remove and use clearedRows
+    setRows(0);
     setLevel(1);
   };
 
-  const movePlayerHorizontally = (direction: number) => {
+  const movePlayerHorizontally = (direction: Direction) => {
     if (!checkCollision(player, stage, { x: direction, y: 0 })) {
-      updateTetrominorPosition({ x: direction, y: 0 }, false);
+      updateTetrominoPosition({ x: direction, y: 0 }, false);
     }
   };
 
@@ -45,14 +57,14 @@ const Game: React.FC = () => {
     }
 
     if (!checkCollision(player, stage, { x: 0, y: 1 })) {
-      updateTetrominorPosition({ x: 0, y: 1 }, false);
+      updateTetrominoPosition({ x: 0, y: 1 }, false);
     } else {
       if (player.position.y < 1) {
         console.log("GAME OVER");
         setGameOver(true);
         setDropTime(null);
       }
-      updateTetrominorPosition({ x: 0, y: 0 }, true);
+      updateTetrominoPosition({ x: 0, y: 0 }, true);
     }
   };
 
@@ -61,26 +73,31 @@ const Game: React.FC = () => {
     moveTetrominoDown();
   };
 
+  const keyActions = (stage: StageType): { [key: string]: () => void } => ({
+    [KeysActions.ARROW_LEFT]: () => movePlayerHorizontally(Direction.LEFT),
+    [KeysActions.ARROW_RIGHT]: () => movePlayerHorizontally(Direction.RIGHT),
+    [KeysActions.ARROW_DOWN]: () => dropTetromino(),
+    [KeysActions.ARROW_UP]: () => rotateTetromino(stage, Direction.RIGHT),
+  });
+
   const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (gameOver) {
+      return;
+    }
+
     const { key } = event;
 
-    if (!gameOver) {
-      if (key === "ArrowLeft") {
-        return movePlayerHorizontally(-1);
-      } else if (key === "ArrowRight") {
-        return movePlayerHorizontally(1);
-      } else if (key === "ArrowDown") {
-        return dropTetromino();
-      } else if (key === "ArrowUp") {
-        rotateTetromino(stage, 1);
-      }
+    const action = keyActions(stage)[key];
+
+    if (typeof action === "function") {
+      action();
     }
   };
 
   const handleKeyUp = (event: React.KeyboardEvent) => {
     const { key } = event;
 
-    if (!gameOver && key === "ArrowDown") {
+    if (!gameOver && key === KeysActions.ARROW_DOWN) {
       setDropTime(1000);
     }
   };

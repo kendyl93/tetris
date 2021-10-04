@@ -1,8 +1,9 @@
 import { useState, useCallback } from "react";
-import { randomTetromino, TETROMINOS } from "../tetrominos";
+import { randomTetromino, TetrominoRowType, TETROMINOS } from "../tetrominos";
 import { TetrominoShapeType } from "../tetrominos";
 import { STAGE } from "../components/Stage/contants";
 import { checkCollision } from "../components/Stage/createStage";
+import { StageType } from "../components/Stage";
 
 interface IPosition {
   x: number;
@@ -27,9 +28,9 @@ const usePlayer = () => {
     tetromino: TETROMINOS[0].shape,
   });
 
-  const rotate = (matrix: any[], direction: number) => {
-    const transposedTetromino = matrix.map((_, index) =>
-      matrix.map((column: any) => column[index])
+  const rotate = (tetrominoShape: TetrominoShapeType[], direction: number) => {
+    const transposedTetromino = tetrominoShape.map((_, index) =>
+      tetrominoShape.map((column: TetrominoRowType[]) => column[index])
     );
 
     if (direction > 0) {
@@ -39,7 +40,7 @@ const usePlayer = () => {
     return transposedTetromino.reverse();
   };
 
-  const rotateTetromino = (stage: any, direction: number) => {
+  const rotateTetromino = (stage: StageType, direction: number) => {
     const clonedPlayer = JSON.parse(JSON.stringify(player));
     clonedPlayer.tetromino = rotate(clonedPlayer.tetromino, direction);
     const pos = player.position.x;
@@ -59,7 +60,7 @@ const usePlayer = () => {
     setPlayer(clonedPlayer);
   };
 
-  const updateTetrominorPosition = ({ x, y }: IPosition, collided: boolean) => {
+  const updateTetrominoPosition = ({ x, y }: IPosition, collided: boolean) => {
     setPlayer((prev) => ({
       ...prev,
       position: { x: (prev.position.x += x), y: (prev.position.y += y) },
@@ -73,7 +74,7 @@ const usePlayer = () => {
 
   return [
     player,
-    updateTetrominorPosition,
+    updateTetrominoPosition,
     resetTetromino,
     rotateTetromino,
   ] as const;
