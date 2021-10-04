@@ -6,33 +6,77 @@ import { TetrominoRowType, TetrominoCellType } from "../tetrominos";
 import {
   STAGE,
   NO_COLLISION_WITH_ANOTHER_TETROMINO,
+  HAS_COLLISION_WITH_ANOTHER_TETROMINO,
+  CELL_TYPE_INDEX,
+  CELL_STATUS_INDEX,
+  CLEAN_CELL,
 } from "../components/Stage/contants";
+import { EMPTY } from "../constants";
+import { increment } from "../utils/math";
+
+type ResetTetrominoType = () => void;
+
+type IncrementCallbackType = (n: number) => number;
+type SetClearRowsType = (callback: IncrementCallbackType) => void;
 
 const drawStage = (previousStage: StageType) =>
   previousStage?.map((row: StageRowType) =>
     row.map((cell: StageCellType) =>
-      cell[1] === NO_COLLISION_WITH_ANOTHER_TETROMINO ? STAGE.EMPTY_CELL : cell
+      cell[CELL_STATUS_INDEX] === NO_COLLISION_WITH_ANOTHER_TETROMINO
+        ? STAGE.EMPTY_CELL
+        : cell
     )
   );
 
 const drawTetrominor = (player: IPlayer, newStage: StageType) => {
   player.tetromino.map((rowValue: TetrominoRowType, Yindex: number) =>
     rowValue.map((cellValue: TetrominoCellType, Xindex: number) => {
-      if (cellValue !== 0) {
-        newStage[Yindex + player.position.y][Xindex + player.position.x] = [
-          cellValue,
-          `${player.collided ? "merged" : "clear"}`,
-        ];
+      if (cellValue === CLEAN_CELL) {
+        // eslint-disable-next-line array-callback-return
+        return;
       }
+      const currentVerticalPosition = Yindex + player.position.y;
+      const currentHorizontalPosition = Xindex + player.position.x;
+      const tetrominoStatus = player.collided
+        ? HAS_COLLISION_WITH_ANOTHER_TETROMINO
+        : NO_COLLISION_WITH_ANOTHER_TETROMINO;
+
+      newStage[currentVerticalPosition][currentHorizontalPosition] = [
+        cellValue,
+        tetrominoStatus,
+      ];
     })
   );
 };
 
+const findRowToClear = (row: StageRowType) =>
+  row.findIndex(
+    (cell: StageCellType) => cell[CELL_TYPE_INDEX] === CLEAN_CELL
+  ) === -1;
+
+const addEmptyRowAtTheTop = (acc: StageType, stage: StageType) =>
+  acc.unshift(new Array(stage[0].length).fill(STAGE.EMPTY_CELL));
+
+const sweepRows = (newStage: StageType, setClearRows: SetClearRowsType) =>
+  newStage.reduce((acc: StageType, row: StageRowType) => {
+    const filledRow = findRowToClear(row);
+
+    if (filledRow) {
+      setClearRows((rows: number) => increment(rows));
+
+      addEmptyRowAtTheTop(acc, newStage);
+      return acc;
+    }
+
+    acc.push(row);
+    return acc;
+  }, []);
+
 const updateStage = (
   player: IPlayer,
   previousStage: StageType,
-  resetTetromino: any,
-  setClearRows: any
+  resetTetromino: ResetTetrominoType,
+  setClearRows: SetClearRowsType
 ) => {
   const newStage = drawStage(previousStage);
   drawTetrominor(player, newStage);
@@ -45,32 +89,17 @@ const updateStage = (
   return newStage;
 };
 
-const sweepRows = (newStage: StageType, setClearRows: any) => {
-  return newStage.reduce((acc: StageType, row: StageRowType) => {
-    if (row.findIndex((cell: StageCellType) => cell[0] === 0) === -1) {
-      setClearRows((prev: any) => prev + 1);
-      acc.unshift(new Array(newStage[0].length).fill([0, "clear"]));
-      return acc;
-    }
-
-    acc.push(row);
-    return acc;
-  }, []);
-};
-
-const useStage = (player: IPlayer, resetTetromino: any) => {
+const useStage = (player: IPlayer, resetTetromino: ResetTetrominoType) => {
   const [stage, setStage] = useState<StageType>(createStage());
-  const [clearedRows, setClearedRows] = useState(0);
-
-  console.log({ stage });
+  const [clearedRows, setClearedRows] = useState(EMPTY);
 
   useEffect(() => {
-    setClearedRows(0);
+    setClearedRows(EMPTY);
 
     setStage((prev: StageType) =>
       updateStage(player, prev, resetTetromino, setClearedRows)
     );
-  }, [player]);
+  }, [player, resetTetromino]);
 
   return [stage, setStage, clearedRows] as const;
 };

@@ -1,5 +1,8 @@
 import { TetrominoRowType, TetrominoShapeType } from "../tetrominos";
+
 export const sum = (a: number, b: number) => a + b;
+
+export const increment = (a: number) => a + 1;
 
 export const calculatecenterStage = (stageWidth: number) => stageWidth / 2 - 2;
 
