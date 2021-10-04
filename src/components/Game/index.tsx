@@ -17,6 +17,8 @@ import {
 } from "../../constants";
 import { calculateDropTime } from "../../utils/time";
 
+type KeyAction = () => void;
+
 const Game: React.FC = () => {
   const [dropTime, setDropTime] = useState<number | null>(null);
   const [gameOver, setGameOver] = useState<boolean>(false);
@@ -79,7 +81,7 @@ const Game: React.FC = () => {
     moveTetrominoDownAndCheckLevelAndGameStatus();
   };
 
-  const keyActions = (stage: StageType): { [key: string]: () => void } => ({
+  const keyActions = (stage: StageType): { [key: string]: KeyAction } => ({
     [KeysActions.ARROW_LEFT]: () => moveTetrominoHorizontally(Direction.LEFT),
     [KeysActions.ARROW_RIGHT]: () => moveTetrominoHorizontally(Direction.RIGHT),
     [KeysActions.ARROW_DOWN]: () => dropTetromino(),

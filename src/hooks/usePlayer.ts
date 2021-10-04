@@ -5,7 +5,7 @@ import { STAGE } from "../components/Stage/contants";
 import { checkCollision } from "../components/Stage/createStage";
 import { StageType } from "../components/Stage";
 
-interface IPosition {
+export interface IPosition {
   x: number;
   y: number;
 }

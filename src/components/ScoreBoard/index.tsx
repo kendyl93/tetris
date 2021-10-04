@@ -10,15 +10,13 @@ interface Props {
   startGame: () => void;
 }
 
-const ScoreBoard: React.FC<Props> = ({ score, rows, level, startGame }) => {
-  return (
-    <StyledScoreBoard>
-      <Display text="Score" value={score} />
-      <Display text="Rows" value={rows} />
-      <Display text="Level" value={level} />
-      <Button onClick={startGame}>START</Button>
-    </StyledScoreBoard>
-  );
-};
+const ScoreBoard: React.FC<Props> = ({ score, rows, level, startGame }) => (
+  <StyledScoreBoard>
+    <Display text="Score" value={score} />
+    <Display text="Rows" value={rows} />
+    <Display text="Level" value={level} />
+    <Button onClick={startGame}>START</Button>
+  </StyledScoreBoard>
+);
 
 export default ScoreBoard;

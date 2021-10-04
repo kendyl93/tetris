@@ -5,15 +5,13 @@ interface Props {
   score: number;
 }
 
-const GameOver: React.FC<Props> = ({ score }) => {
-  return (
-    <StyledGameOver>
-      <div className="text">
-        <div>GAME OVER</div>
-        <div>score: {score}</div>
-      </div>
-    </StyledGameOver>
-  );
-};
+const GameOver: React.FC<Props> = ({ score }) => (
+  <StyledGameOver>
+    <div className="text">
+      <div>GAME OVER</div>
+      <div>score: {score}</div>
+    </div>
+  </StyledGameOver>
+);
 
 export default GameOver;
