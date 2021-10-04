@@ -8,6 +8,9 @@ export const StyledGameWrapper = styled.div`
 
 export const StyledGame = styled.div`
   display: flex;
+  justify-content: center;
+  align-items: baseline;
+  display: flex;
   align-items: flex-start;
   padding: 40px;
   margin: 0 auto;
@@ -15,7 +18,7 @@ export const StyledGame = styled.div`
 
   aside {
     width: 100%;
-    max-width: 200px;
+    max-width: 180px;
     display: block;
     padding: 0 20px;
   }

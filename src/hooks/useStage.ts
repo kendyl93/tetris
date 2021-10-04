@@ -39,7 +39,6 @@ const updateStage = (
 
   if (player.collided) {
     resetTetromino();
-    debugger;
     return sweepRows(newStage, setClearRows);
   }
 
