@@ -2,9 +2,9 @@ import React from "react";
 import Cell from "../Cell";
 import { StyledStage } from "./Styles";
 
-export type StageCell = Array<number | string>;
-export type StageRow = Array<StageCell>;
-export type StageType = Array<StageRow>;
+export type StageCellType = Array<number | string>;
+export type StageRowType = Array<StageCellType>;
+export type StageType = Array<StageRowType>;
 interface Props {
   stage: StageType;
 }

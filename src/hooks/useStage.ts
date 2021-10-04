@@ -1,21 +1,23 @@
 import { useState, useEffect } from "react";
 import { createStage } from "../components/Stage/createStage";
 import { IPlayer } from "./usePlayer";
+import { StageType, StageRowType, StageCellType } from "../components/Stage";
+import { TetrominoRowType, TetrominoCellType } from "../tetrominos";
 import {
   STAGE,
-  NO_COLLISION_WITH_ANOTHER_TETROMINOR,
+  NO_COLLISION_WITH_ANOTHER_TETROMINO,
 } from "../components/Stage/contants";
 
-const drawStage = (previousStage: any) =>
-  previousStage?.map((row: any) =>
-    row.map((cell: any) =>
-      cell[1] === NO_COLLISION_WITH_ANOTHER_TETROMINOR ? STAGE.EMPTY_CELL : cell
+const drawStage = (previousStage: StageType) =>
+  previousStage?.map((row: StageRowType) =>
+    row.map((cell: StageCellType) =>
+      cell[1] === NO_COLLISION_WITH_ANOTHER_TETROMINO ? STAGE.EMPTY_CELL : cell
     )
   );
 
-const drawTetrominor = (player: any, newStage: any) => {
-  player.tetromino.map((rowValue: any, Yindex: any) =>
-    rowValue.map((cellValue: any, Xindex: any) => {
+const drawTetrominor = (player: IPlayer, newStage: StageType) => {
+  player.tetromino.map((rowValue: TetrominoRowType, Yindex: number) =>
+    rowValue.map((cellValue: TetrominoCellType, Xindex: number) => {
       if (cellValue !== 0) {
         newStage[Yindex + player.position.y][Xindex + player.position.x] = [
           cellValue,
@@ -28,7 +30,7 @@ const drawTetrominor = (player: any, newStage: any) => {
 
 const updateStage = (
   player: IPlayer,
-  previousStage: any,
+  previousStage: StageType,
   resetTetromino: any,
   setClearRows: any
 ) => {
@@ -44,9 +46,9 @@ const updateStage = (
   return newStage;
 };
 
-const sweepRows = (newStage: any, setClearRows: any) => {
-  return newStage.reduce((acc: any, row: any) => {
-    if (row.findIndex((cell: any) => cell[0] === 0) === -1) {
+const sweepRows = (newStage: StageType, setClearRows: any) => {
+  return newStage.reduce((acc: StageType, row: StageRowType) => {
+    if (row.findIndex((cell: StageCellType) => cell[0] === 0) === -1) {
       setClearRows((prev: any) => prev + 1);
       acc.unshift(new Array(newStage[0].length).fill([0, "clear"]));
       return acc;
@@ -58,7 +60,7 @@ const sweepRows = (newStage: any, setClearRows: any) => {
 };
 
 const useStage = (player: IPlayer, resetTetromino: any) => {
-  const [stage, setStage] = useState<any>(createStage());
+  const [stage, setStage] = useState<StageType>(createStage());
   const [clearedRows, setClearedRows] = useState(0);
 
   console.log({ stage });
@@ -66,7 +68,7 @@ const useStage = (player: IPlayer, resetTetromino: any) => {
   useEffect(() => {
     setClearedRows(0);
 
-    setStage((prev: any) =>
+    setStage((prev: StageType) =>
       updateStage(player, prev, resetTetromino, setClearedRows)
     );
   }, [player]);

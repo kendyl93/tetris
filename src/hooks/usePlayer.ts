@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 import { randomTetromino, TETROMINOS } from "../tetrominos";
-import { TetrominoShape } from "../tetrominos";
+import { TetrominoShapeType } from "../tetrominos";
 import { STAGE } from "../components/Stage/contants";
 import { checkCollision } from "../components/Stage/createStage";
 
@@ -11,7 +11,7 @@ interface IPosition {
 
 export interface IPlayer {
   position: IPosition;
-  tetromino: TetrominoShape;
+  tetromino: TetrominoShapeType;
   collided: boolean;
 }
 

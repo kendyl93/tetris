@@ -1,10 +1,10 @@
 const EMPTY = 0;
 
-type TetrominoCell = number | string;
-type TetrominoRow = Array<TetrominoCell>;
-export type TetrominoShape = Array<TetrominoRow>;
+export type TetrominoCellType = number | string;
+export type TetrominoRowType = Array<TetrominoCellType>;
+export type TetrominoShapeType = Array<TetrominoRowType>;
 type Tetromino = {
-  [key: string]: { shape: TetrominoShape; color: string };
+  [key: string]: { shape: TetrominoShapeType; color: string };
 };
 
 export const TETROMINOS: Tetromino = {
