@@ -29,14 +29,15 @@ const drawTetrominor = (player: any, newStage: any) => {
 const updateStage = (
   player: IPlayer,
   previousStage: any,
-  resetPlayer: any,
+  resetTetromino: any,
   setClearRows: any
 ) => {
   const newStage = drawStage(previousStage);
   drawTetrominor(player, newStage);
 
   if (player.collided) {
-    resetPlayer();
+    resetTetromino();
+    debugger;
     return sweepRows(newStage, setClearRows);
   }
 
@@ -56,7 +57,7 @@ const sweepRows = (newStage: any, setClearRows: any) => {
   }, []);
 };
 
-const useStage = (player: IPlayer, resetPlayer: any) => {
+const useStage = (player: IPlayer, resetTetromino: any) => {
   const [stage, setStage] = useState<any>(createStage());
   const [clearedRows, setClearedRows] = useState(0);
 
@@ -66,7 +67,7 @@ const useStage = (player: IPlayer, resetPlayer: any) => {
     setClearedRows(0);
 
     setStage((prev: any) =>
-      updateStage(player, prev, resetPlayer, setClearedRows)
+      updateStage(player, prev, resetTetromino, setClearedRows)
     );
   }, [player]);
 

@@ -12,20 +12,20 @@ import { useGameStatus } from "../../hooks/useGameStatus";
 const Game: React.FC = () => {
   const [dropTime, setDropTime] = useState<number | null>(null);
   const [gameOver, setGameOver] = useState(false);
-  const [player, updateTetrominorPosition, resetPlayer, rotateTetromino] =
+  const [player, updateTetrominorPosition, resetTetromino, rotateTetromino] =
     usePlayer();
-  const [stage, setStage, clearedRows] = useStage(player, resetPlayer);
+  const [stage, setStage, clearedRows] = useStage(player, resetTetromino);
   const [score, setScore, rows, setRows, level, setLevel] =
     useGameStatus(clearedRows);
 
-  // useInterval(() => {
-  //   moveTetrominoDown();
-  // }, dropTime);
+  useInterval(() => {
+    moveTetrominoDown();
+  }, dropTime);
 
   const startGame = () => {
     setStage(createStage());
     setDropTime(1000 / level + 200);
-    resetPlayer();
+    resetTetromino();
     setGameOver(false);
     setScore(0);
     setRows(0); //remove and use clearedRows
@@ -96,7 +96,10 @@ const Game: React.FC = () => {
         <Stage stage={stage} />
         <aside>
           {gameOver ? (
-            <Display text="GameOver" />
+            <>
+              <Display text="GameOver" />
+              <button onClick={startGame}>START</button>
+            </>
           ) : (
             <>
               <Display text={`Score: ${score}`} />

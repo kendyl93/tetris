@@ -27,8 +27,6 @@ const usePlayer = () => {
     tetromino: TETROMINOS[0].shape,
   });
 
-  console.log({ player });
-
   const rotate = (matrix: any[], direction: number) => {
     const transposedTetromino = matrix.map((_, index) =>
       matrix.map((column: any) => column[index])
@@ -69,14 +67,14 @@ const usePlayer = () => {
     }));
   };
 
-  const resetPlayer = useCallback(() => {
+  const resetTetromino = useCallback(() => {
     setPlayer(initialPlayerFeatures());
   }, []);
 
   return [
     player,
     updateTetrominorPosition,
-    resetPlayer,
+    resetTetromino,
     rotateTetromino,
   ] as const;
 };
