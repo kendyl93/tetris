@@ -7,7 +7,7 @@ interface Props {
 const Display: React.FC<Props> = ({ text }) => {
   return (
     <div>
-      Display<div>{text}</div>
+      <div>{text}</div>
     </div>
   );
 };

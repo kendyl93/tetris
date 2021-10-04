@@ -21,6 +21,11 @@ enum KeysActions {
   ARROW_UP = "ArrowUp",
 }
 
+const ONE_SECOND = 1000;
+const TIME_OFFSET = 200;
+
+const calculateDropTime = (level: number) => ONE_SECOND / level + TIME_OFFSET;
+
 const Game: React.FC = () => {
   const [dropTime, setDropTime] = useState<number | null>(null);
   const [gameOver, setGameOver] = useState(false);
@@ -31,12 +36,12 @@ const Game: React.FC = () => {
     useGameStatus(clearedRows);
 
   useInterval(() => {
-    moveTetrominoDown();
+    moveTetrominoDownAndCheckLevelAndGameStatus();
   }, dropTime);
 
   const startGame = () => {
     setStage(createStage());
-    setDropTime(1000 / level + 200);
+    setDropTime(calculateDropTime(level));
     resetTetromino();
     setGameOver(false);
     setScore(0);
@@ -45,32 +50,38 @@ const Game: React.FC = () => {
   };
 
   const movePlayerHorizontally = (direction: Direction) => {
-    if (!checkCollision(player, stage, { x: direction, y: 0 })) {
-      updateTetrominoPosition({ x: direction, y: 0 }, false);
+    const moveToPosition = { x: direction, y: 0 };
+
+    if (!checkCollision(player, stage, moveToPosition)) {
+      updateTetrominoPosition(moveToPosition, false);
     }
   };
 
-  const moveTetrominoDown = () => {
-    if (rows > level * 10) {
-      setLevel((prev) => prev + 1);
-      setDropTime(1000 / level + 200);
+  const moveTetrominoDownAndCheckLevelAndGameStatus = () => {
+    const nextLevel = rows > level * 5;
+
+    if (nextLevel) {
+      setLevel((level) => level + 1);
+      setDropTime(calculateDropTime(level));
     }
 
-    if (!checkCollision(player, stage, { x: 0, y: 1 })) {
-      updateTetrominoPosition({ x: 0, y: 1 }, false);
+    const moveDownOnce = { x: 0, y: 1 };
+    if (!checkCollision(player, stage, moveDownOnce)) {
+      updateTetrominoPosition(moveDownOnce, false);
     } else {
       if (player.position.y < 1) {
         console.log("GAME OVER");
         setGameOver(true);
         setDropTime(null);
       }
-      updateTetrominoPosition({ x: 0, y: 0 }, true);
+      const dontMove = { x: 0, y: 0 };
+      updateTetrominoPosition(dontMove, true);
     }
   };
 
   const dropTetromino = () => {
     setDropTime(null);
-    moveTetrominoDown();
+    moveTetrominoDownAndCheckLevelAndGameStatus();
   };
 
   const keyActions = (stage: StageType): { [key: string]: () => void } => ({
@@ -86,7 +97,6 @@ const Game: React.FC = () => {
     }
 
     const { key } = event;
-
     const action = keyActions(stage)[key];
 
     if (typeof action === "function") {
@@ -98,7 +108,7 @@ const Game: React.FC = () => {
     const { key } = event;
 
     if (!gameOver && key === KeysActions.ARROW_DOWN) {
-      setDropTime(1000);
+      setDropTime(ONE_SECOND);
     }
   };
 
@@ -110,21 +120,12 @@ const Game: React.FC = () => {
       onKeyUp={handleKeyUp}
     >
       <StyledGame>
-        <Stage stage={stage} />
+        <Stage stage={stage} gameOver={gameOver} score={score} />
         <aside>
-          {gameOver ? (
-            <>
-              <Display text="GameOver" />
-              <button onClick={startGame}>START</button>
-            </>
-          ) : (
-            <>
-              <Display text={`Score: ${score}`} />
-              <Display text={`Rows: ${rows}`} />
-              <Display text={`level: ${level}`} />
-              <button onClick={startGame}>START</button>
-            </>
-          )}
+          <Display text={`Score: ${score}`} />
+          <Display text={`Rows: ${rows}`} />
+          <Display text={`level: ${level}`} />
+          <button onClick={startGame}>START</button>
         </aside>
       </StyledGame>
     </StyledGameWrapper>
