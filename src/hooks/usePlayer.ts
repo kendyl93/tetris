@@ -1,9 +1,11 @@
 import { useState, useCallback } from "react";
-import { randomTetromino, TetrominoRowType, TETROMINOS } from "../tetrominos";
+import { randomTetromino } from "../tetrominos";
 import { TetrominoShapeType } from "../tetrominos";
-import { STAGE } from "../components/Stage/contants";
 import { checkCollision } from "../components/Stage/createStage";
 import { StageType } from "../components/Stage";
+import { calculatecenterStage, transposeTetromino } from "../utils/math";
+import { NO_TETROMINO, STAGE } from "../components/Stage/contants";
+import { Direction } from "../constants";
 
 export interface IPosition {
   x: number;
@@ -17,30 +19,28 @@ export interface IPlayer {
 }
 
 const initialPlayerFeatures = () => ({
-  position: { x: STAGE.WIDTH / 2 - 2, y: 0 },
+  position: { x: calculatecenterStage(STAGE.WIDTH), y: 0 },
   tetromino: randomTetromino().shape,
   collided: false,
 });
 
+const rotate = (tetrominoShape: TetrominoShapeType, direction: Direction) => {
+  const transposedTetromino = transposeTetromino(tetrominoShape);
+
+  if (direction === Direction.RIGHT) {
+    return transposedTetromino.map((row) => row.reverse());
+  }
+
+  return transposedTetromino.reverse();
+};
+
 const usePlayer = () => {
   const [player, setPlayer] = useState<IPlayer>({
     ...initialPlayerFeatures(),
-    tetromino: TETROMINOS[0].shape,
+    tetromino: NO_TETROMINO,
   });
 
-  const rotate = (tetrominoShape: TetrominoShapeType[], direction: number) => {
-    const transposedTetromino = tetrominoShape.map((_, index) =>
-      tetrominoShape.map((column: TetrominoRowType[]) => column[index])
-    );
-
-    if (direction > 0) {
-      return transposedTetromino.map((row) => row.reverse());
-    }
-
-    return transposedTetromino.reverse();
-  };
-
-  const rotateTetromino = (stage: StageType, direction: number) => {
+  const rotateTetromino = (stage: StageType, direction: Direction) => {
     const clonedPlayer = JSON.parse(JSON.stringify(player));
     clonedPlayer.tetromino = rotate(clonedPlayer.tetromino, direction);
     const pos = player.position.x;
@@ -51,7 +51,6 @@ const usePlayer = () => {
       offset = -(offset + (offset > 0 ? 1 : -1)); // if still collision add more offset left or right
 
       if (offset > clonedPlayer.tetromino[0].length) {
-        // rotate(clonedPlayer.tetromino, -direction);
         clonedPlayer.position.x = pos;
         return;
       }
