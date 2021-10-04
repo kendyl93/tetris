@@ -13,6 +13,7 @@ import {
 } from "../components/Stage/contants";
 import { EMPTY } from "../constants";
 import { increment } from "../utils/math";
+import { fillWith } from "../utils/array";
 
 type ResetTetrominoType = () => void;
 
@@ -55,7 +56,7 @@ const findRowToClear = (row: StageRowType) =>
   ) === -1;
 
 const addEmptyRowAtTheTop = (acc: StageType, stage: StageType) =>
-  acc.unshift(new Array(stage[0].length).fill(STAGE.EMPTY_CELL));
+  acc.unshift(fillWith(new Array(stage[0].length), STAGE.EMPTY_CELL));
 
 const sweepRows = (newStage: StageType, setClearRows: SetClearRowsType) =>
   newStage.reduce((acc: StageType, row: StageRowType) => {
