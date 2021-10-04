@@ -1,5 +1,5 @@
 import React from "react";
-import Cell from "../Cell";
+import Cell from "./Cell";
 import { StyledStage } from "./Styles";
 import GameOver from "../GameOver";
 import { CELL_TYPE_INDEX } from "./contants";

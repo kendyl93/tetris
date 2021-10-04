@@ -15,3 +15,5 @@ export const TIME_OFFSET = 200;
 
 export const EMPTY = 0;
 export const STARTING_LEVEL = 1;
+
+export const LINE_POINTS = [40, 100, 300, 1200]; // https://tetris.wiki/Scoring

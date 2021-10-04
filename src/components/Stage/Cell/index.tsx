@@ -1,6 +1,6 @@
 import React from "react";
 import { StyledCell } from "./Styles";
-import { TETROMINOS } from "../../tetrominos";
+import { TETROMINOS } from "../../../tetrominos";
 
 interface Props {
   type: number | string;
