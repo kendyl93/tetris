@@ -10,7 +10,7 @@ Go to **http://localhost:3000/**
 
 # Game Instructions
 
-To run the app press **START** button.
+To run the app press **START** button. Colors of tetrominos, scoring and other rules was taken(or just inspired by) from https://tetris.wiki/.
 
 # Game Controls
 
