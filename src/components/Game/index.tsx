@@ -24,7 +24,6 @@ const Game: React.FC = () => {
 
   useInterval(() => {
     moveTetrominoDownAndCheckLevelAndGameStatus();
-    console.log({ dropTime });
   }, dropTime);
 
   const startGame = () => {
