@@ -1,4 +1,4 @@
-import { ONE_SECOND, TIME_OFFSET } from "../constants";
+import { ONE_CYCLE, TIME_OFFSET } from '../constants';
 
 export const calculateDropTime = (level: number) =>
-  ONE_SECOND / level + TIME_OFFSET;
+  ONE_CYCLE / level + TIME_OFFSET;

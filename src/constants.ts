@@ -4,13 +4,13 @@ export enum Direction {
 }
 
 export enum KeysActions {
-  ARROW_LEFT = "ArrowLeft",
-  ARROW_RIGHT = "ArrowRight",
-  ARROW_DOWN = "ArrowDown",
-  ARROW_UP = "ArrowUp",
+  ARROW_LEFT = 'ArrowLeft',
+  ARROW_RIGHT = 'ArrowRight',
+  ARROW_DOWN = 'ArrowDown',
+  ARROW_UP = 'ArrowUp',
 }
 
-export const ONE_SECOND = 1000;
+export const ONE_CYCLE = 600;
 export const TIME_OFFSET = 200;
 
 export const EMPTY = 0;

@@ -1,21 +1,15 @@
-import React, { useState } from "react";
-import Stage, { StageType } from "../Stage";
-import { StyledGameWrapper, StyledGame } from "./Styles";
-import usePlayer from "../../hooks/usePlayer";
-import useStage from "../../hooks/useStage";
-import { createStage } from "../Stage/createStage";
-import { checkCollision } from "../Stage/createStage";
-import useInterval from "../../hooks/useInterval";
-import { useGameStatus } from "../../hooks/useGameStatus";
-import ScoreBoard from "../ScoreBoard";
-import {
-  Direction,
-  KeysActions,
-  ONE_SECOND,
-  STARTING_LEVEL,
-  EMPTY,
-} from "../../constants";
-import { calculateDropTime } from "../../utils/time";
+import React, { useState } from 'react';
+import Stage, { StageType } from '../Stage';
+import { StyledGameWrapper, StyledGame } from './Styles';
+import usePlayer from '../../hooks/usePlayer';
+import useStage from '../../hooks/useStage';
+import { createStage } from '../Stage/createStage';
+import { checkCollision } from '../Stage/createStage';
+import useInterval from '../../hooks/useInterval';
+import { useGameStatus } from '../../hooks/useGameStatus';
+import ScoreBoard from '../ScoreBoard';
+import { Direction, KeysActions, STARTING_LEVEL, EMPTY } from '../../constants';
+import { calculateDropTime } from '../../utils/time';
 
 type KeyAction = () => void;
 
@@ -30,6 +24,7 @@ const Game: React.FC = () => {
 
   useInterval(() => {
     moveTetrominoDownAndCheckLevelAndGameStatus();
+    console.log({ dropTime });
   }, dropTime);
 
   const startGame = () => {
@@ -51,7 +46,7 @@ const Game: React.FC = () => {
   };
 
   const moveTetrominoDownAndCheckLevelAndGameStatus = () => {
-    const nextLevel = rows > level * 5;
+    const nextLevel = rows > level * 2;
 
     if (nextLevel) {
       setLevel((level) => level + 1);
@@ -96,7 +91,7 @@ const Game: React.FC = () => {
     const { key } = event;
     const action = keyActions(stage)[key];
 
-    if (typeof action === "function") {
+    if (typeof action === 'function') {
       action();
     }
   };
@@ -105,7 +100,7 @@ const Game: React.FC = () => {
     const { key } = event;
 
     if (!gameOver && key === KeysActions.ARROW_DOWN) {
-      setDropTime(ONE_SECOND);
+      setDropTime(calculateDropTime(level));
     }
   };
 
