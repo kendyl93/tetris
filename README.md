@@ -4,7 +4,8 @@ Tetris App made with **React** and **Typescript**.
 
 # Getting Started
 
-`npm run start` - run the app
+0. `npm install` - Install dependencies(only for the first time).
+1. `npm run start` - Run the app.
 
 Go to **http://localhost:3000/**
 
