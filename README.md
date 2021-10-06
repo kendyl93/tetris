@@ -1,3 +1,5 @@
+You can play this game [Here](https://kendyl93.github.io/tetris/).
+
 # About
 
 Tetris App made with **React** and **Typescript**.
